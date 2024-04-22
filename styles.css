@@ -1,0 +1,78 @@
+body {
+    background-color: black;
+    cursor: url('cursor.png'), help;
+}
+
+p, h1, h2 {
+    color: white;
+}
+
+div {
+    background-color: rgb(83, 83, 83);
+    padding: 10px;
+}
+
+.doublediv {
+    background-color: rgb(43, 43, 43);
+}
+
+* {
+    border-radius: 10px;
+    font-family: "Nunito";
+}
+
+#stockCanvas {
+    cursor: none;
+}
+
+#contactCanvas {
+    position: absolute;
+    left: 50%;
+    cursor: none;
+}
+
+button {
+    transition: 0.1s;
+    width: fit-content;
+    height: fit-content;
+    background-color: gray;
+    color: white;
+    font-size: large;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+}
+
+button:hover {
+    background-color: rgb(104, 104, 104);
+}
+
+button:active {
+    background-color: rgb(76, 91, 158)
+}
+
+.title {
+    width: 50%;
+    margin: auto;
+    border: 3px solid black;
+    color: rgb(29, 155, 29);
+    font-family: 'Jersey 10';
+    text-align: center; /* Center align the text */
+    background-color: black;
+}
+
+.organChangeButton {
+    background-color: rgb(115, 115, 214);
+}
+
+.buyButton {
+    background-color: green;
+}
+
+.sellButton {
+    background-color: rgb(119, 29, 29);
+}
+
+button:hover {
+    cursor:url('hovercursor.png'),help;
+}
