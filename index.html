@@ -37,14 +37,14 @@
                 <div id="organ_selector" class="doublediv">
                     <button onclick="assureBoundsSelectedOrgan(-1);" class="organChangeButton">Last</button>
                     <button onclick="assureBoundsSelectedOrgan(1);" class="organChangeButton">Next</button>
-                    <button onclick="" class="buyButton">Buy 1x</button>
-                    <button onclick="" class="buyButton">Buy 2x</button>
-                    <button onclick="" class="buyButton">Buy 5x</button>
-                    <button onclick="" class="buyButton">Buy 10x</button>
-                    <button onclick="" class="SellButton">Sell 10x</button>
-                    <button onclick="" class="SellButton">Sell 5x</button>
-                    <button onclick="" class="SellButton">Sell 2x</button>
-                    <button onclick="" class="SellButton">Sell 1x</button>
+                    <button onclick="organTransaction(1)" class="buyButton">Buy 1x</button>
+                    <button onclick="organTransaction(2)" class="buyButton">Buy 2x</button>
+                    <button onclick="organTransaction(5)" class="buyButton">Buy 5x</button>
+                    <button onclick="organTransaction(10)" class="buyButton">Buy 10x</button>
+                    <button onclick="organTransaction(-10)" class="SellButton">Sell 10x</button>
+                    <button onclick="organTransaction(-5)" class="SellButton">Sell 5x</button>
+                    <button onclick="organTransaction(-2)" class="SellButton">Sell 2x</button>
+                    <button onclick="organTransaction(-1)" class="SellButton">Sell 1x</button>
                 </div>
 
             <h1 id="organ_name"></h1>

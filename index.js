@@ -86,6 +86,8 @@ var organs = [
     }
 ];
 
+var ownedOrgans = {};
+
 for (var i = 0; i < organs.length; i++) {
     var organ = organs[i];
     for (var developments = 0; developments < 3000; developments++) {
@@ -97,6 +99,7 @@ for (var i = 0; i < organs.length; i++) {
         }
         organ.prices.push(organ.currentPrice);
     }
+    ownedOrgans[organ.name] = 0;
 }
 
 var selectedOrgan = Math.floor(Math.random() * organs.length);
@@ -120,7 +123,8 @@ var mousePositionStock = [0, 0];
 var player = {
     money: 3.45,
     stocks: [],
-    networth: "Low"
+    networth: "Low",
+    showAverage: false,
 }
 
 function assureBoundsSelectedOrgan(amount) {
@@ -128,6 +132,25 @@ function assureBoundsSelectedOrgan(amount) {
     if (selectedOrgan == -1) { selectedOrgan = 0; }
     if (selectedOrgan == organs.length) { selectedOrgan = organs.length - 1; }
 }
+
+function organTransaction(amount, sound = true) {
+    var price = amount * organs[selectedOrgan].currentPrice;
+    if (amount < 0 && ownedOrgans[organs[selectedOrgan].name] + amount < 0 || player.money < price) {
+        if (sound) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine'; // Set oscillator type to sine wave
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime); // Set frequency to a low value (e.g., 600 Hz)
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.2); // Stop after 0.2 seconds
+        }
+        return;
+    }
+    player.money -= price;
+    ownedOrgans[organs[selectedOrgan].name] += amount;
+}
+
 
 contactCanvas.addEventListener('mousemove', function (event) {
     var rect = contactCanvas.getBoundingClientRect();
@@ -216,7 +239,7 @@ function generateUsername() {
 contactMessages.push({
     text: `To get you started...`,
     sender: "???",
-    body: "As you know already, the market is thriving. Just don't buy pancreas and you'll be fine, buddy. If you're living under a rock, the year's 4588; and a friendly tip: if you're planning on kicking the bucket, make sure you've got $500 stashed away for genetic recombination. Just because I'm so very very nice, I attached 8000$. Btw, I'm a Corprate Ridiculously High Networth Invidual, chump.",
+    body: "As you know already, the market is thriving. Just don't buy pancreas and you'll be fine, buddy. If you're living under a rock, the year's 4588; and a friendly tip: if you're planning on kicking the bucket, make sure you've got $500 stashed away for genetic recombination. Just because I'm so very very nice, I attached 8000$. Btw, I'm a Corprate Ridiculously High Networth Invidual, chump; oh, and I also attached a program that shows you the average price of an item, so have fun.",
     viewonce: true,
     onview: "player.money+=8000;"
 });
@@ -273,21 +296,6 @@ function updateStocksUI(currentOrgan) {
 
     var offset = mean - (stockCanvas.height / 2 - mean);
 
-    // stockCtx.fillStyle = "orange";
-    // stockCtx.fillRect(0, (maxPrice), stockCanvas.width, 3);
-
-    // stockCtx.fillStyle = "purple";
-    // stockCtx.fillRect(0, (minPrice), stockCanvas.width, 3);
-
-    // stockCtx.fillStyle = "gray";
-    // stockCtx.fillRect(0, mean, stockCanvas.width, 3);
-
-    // stockCtx.fillStyle = "black";
-    // stockCtx.fillRect(0, stockCanvas.height / 2, stockCanvas.width, 3);
-
-    // stockCtx.fillStyle = "purple";
-    // stockCtx.fillRect(stockCanvas.width / 2, mean, 3, stockCanvas.height / 2 - mean);
-
     stockCtx.strokeStyle = "red";
     var last = 0;
     for (var i = 0; i < currentOrganPrices.length; i++) {
@@ -315,6 +323,9 @@ function updateStocksUI(currentOrgan) {
     if (typeof currentOrgan.backgroundText != "undefined") {
         renderText(`${currentOrgan.backgroundText}`, 30, 140);
     }
+
+    stockCtx.fillStyle = "orange";
+    stockCtx.fillRect(0, (mean + currentOrgan.minPrice), stockCanvas.width, 3);
 }
 
 var contactUISelectIndex = 0;
