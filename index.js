@@ -251,8 +251,10 @@ for (var i = 0; i < 10; i++) {
     contactMessages.push({
         text: `REQUEST: ${request.amountRequested} ${organ_abbr}`,
         sender: user,
-        body: `${organs[request.organRequested].name}:${request.amountRequested}:${user}[OrganRequester™]`,
-        viewonce: false
+        body: `[PERFORM TRANSACTION] Note: If you are not the intended recipient, according to the laws of BEAJ, please disregard this message. Report any failure to conduct the transaction properly due to incorrect identification measures to OrganRequester at ID 84901238. Transaction Details: Title: ${organs[request.organRequested].name} Amount: ${request.amountRequested} Requester: ${user} (OrganRequester™)`,
+        viewonce: false,
+        transaction: true,
+        transactionRequest: request
     });
 }
 
@@ -471,6 +473,25 @@ function calculateNetWorthLabel(playerMoney) {
     return "Infinite";
 }
 
+function getOrganIndexByName(name) {
+    for(var i = 0; i < organs.length; i++) {
+        if(organs[i].name == name) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function thirdPartyOrganTransaction(amount, name) {
+    if(ownedOrgans[name] >= amount) {
+        ownedOrgans[name] -= amount;
+        player.money += organs[getOrganIndexByName(name)].currentPrice * 1.1;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 setInterval(update, 10);
 setInterval(function () {
     player.networth = calculateNetWorthLabel(player.money);
@@ -530,6 +551,19 @@ addEventListener("keydown", (event) => {
             }
             eval(contactMessage.onview);
             contactText = ["...", "Mail:"];
+            for (let i = 0; i < contactMessages.length; i++) {
+                setTimeout(() => {
+                    contactText.push(`     '${contactMessages[i].text}' from ${contactMessages[i].sender}`);
+                }, (i + 1) * 10);
+            }
+        } else if(contactUIState == "view" && contactUISelectIndex == 5 && contactMessage.transaction) {
+            var success = thirdPartyOrganTransaction(contactMessage.transactionRequest.amountRequested, organs[contactMessage.transactionRequest.organRequested].name);
+            contactUIState = "listings";
+            contactUISelectIndex = 0;
+            contactText = [];
+            if(success) {contactMessages.splice(oldContactUISelectIndex - 2, 1);}else{contactText = ["INSUFFICIENT ITEMS TO PROCEED!"];}
+            eval(contactMessage.onview);
+            contactText.push("...", "Mail:");
             for (let i = 0; i < contactMessages.length; i++) {
                 setTimeout(() => {
                     contactText.push(`     '${contactMessages[i].text}' from ${contactMessages[i].sender}`);
