@@ -485,7 +485,7 @@ function getOrganIndexByName(name) {
 function thirdPartyOrganTransaction(amount, name) {
     if(ownedOrgans[name] >= amount) {
         ownedOrgans[name] -= amount;
-        player.money += organs[getOrganIndexByName(name)].currentPrice * 1.1;
+        player.money += organs[getOrganIndexByName(name)].currentPrice * 20;
         return true;
     } else {
         return false;
