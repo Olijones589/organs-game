@@ -557,7 +557,7 @@ addEventListener("keydown", (event) => {
                 }, (i + 1) * 10);
             }
         } else if(contactUIState == "view" && contactUISelectIndex == 5 && contactMessage.transaction) {
-            var success = thirdPartyOrganTransaction(contactMessage.transactionRequest.amountRequested, organs[contactMessage.transactionRequest.organRequested].name);
+            var success = thirdPartyOrganTransaction(-contactMessage.transactionRequest.amountRequested, organs[contactMessage.transactionRequest.organRequested].name);
             contactUIState = "listings";
             contactUISelectIndex = 0;
             contactText = [];
